@@ -21,7 +21,7 @@
 		</fieldset>
 		<fieldset>
 			<legend>피자 사이즈</legend>
-			<input type="radio" id="small" name="size" value="1">
+			<input type="radio" id="small" name="size" value="1" inputmode="text">
 			<label for="small">Small</label>
 			<br>
 			<input type="radio" id="medium" name="size" value="2">
