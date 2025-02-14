@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <title>회원가입 페이지</title>
 <link href="<%=request.getContextPath()%>/resources/css/member/create.css" rel="stylesheet" type="text/css">
+<script src="<%=request.getContextPath()%>/resources/js/jquery-3.7.1.js"></script>
 </head>
 <body>
 	<%@include file="../include/header.jsp"%>
@@ -30,7 +31,7 @@
 				</form>
 			</div>
 			<div class="login">
-				<a href="#">로그인</a>
+				<a href="/memberLogin">로그인</a>
 			</div>
 		</div>
 	</section>
@@ -50,7 +51,28 @@
 				alert('비밀번호가 일치하지 않습니다.');
 				form.member_pw_check.focus();
 			} else {
-				form.submit();
+				/* form.submit(); */
+				// console.log(data);
+				// res_msg를 alert창에 출력
+				// 만약 res_code가 200과 같다면
+				// '/' 경로로 이동
+				$.ajax({
+					url : "memberCreateEnd",
+					type : "post",
+					data : {
+						"member_id" : form.member_id.value,
+						"member_pw" : form.member_pw.value,
+						"member_name" : form.member_name.value
+					},
+					dataType : "JSON",
+					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+					success : function(data) {
+						alert(data["res_msg"]);
+						if (data.res_code == 200) {
+							location.href = "/views/member/create_success.jsp";
+						}
+					}
+				});
 			}
 		}
 	</script>

@@ -45,8 +45,8 @@ public class Member {
 	}
 	@Override
 	public String toString() {
-		return "번호=" + memberNo + ", 아이디=" + memberId + ", 비밀번호=" + memberPw
-				+ ", 닉네임=" + memberName;
+		return "번호=" + memberNo + "\n아이디=" + memberId + "\n비밀번호=" + memberPw
+				+ "\n닉네임=" + memberName;
 	}
 
 }
