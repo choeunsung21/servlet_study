@@ -73,7 +73,7 @@ public class BoardDao {
 		return attachNo;
 	}
 
-	public List<Board> selectBoardList(Connection conn) {
+	public List<Board> selectBoardList(Connection conn, Board option) {
 		// 게시글 번호(board_no)
 		// 게시글 제목(board_title)
 		// 게시글 내용(board_content)
@@ -87,8 +87,12 @@ public class BoardDao {
 
 		try {
 			resultList = new ArrayList<Board>();
-			String sql = "SELECT * FROM `board` b JOIN member m ON b.board_writer = m.member_no";
-
+			String sql = "SELECT * FROM `board` b JOIN member m ON b.board_writer = m.member_no ";
+			if (option.getBoardTitle() != null) {
+				sql += "WHERE board_title LIKE CONCAT('%','" + option.getBoardTitle() + "','%') ";
+			}
+			///// 추가 /////
+			sql += "LIMIT " + option.getLimitPageNo() + ", " + option.getNumPerPage();
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
@@ -108,6 +112,61 @@ public class BoardDao {
 			close(pstmt);
 		}
 		return resultList;
+	}
+
+	public int selectBoardCount(Connection conn, Board option) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result = 0;
+		try {
+			String sql = "SELECT COUNT(*) FROM board ";
+			if (option.getBoardTitle() != null) {
+				sql += "WHERE board_title LIKE CONCAT('%','" + option.getBoardTitle() + "','%') ";
+			}
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		return result;
+	}
+
+	public Board selectBoardOne(Connection conn, int boardNo) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Board board = null;
+
+		try {
+			String sql = "SELECT * FROM board b JOIN member m ON b.board_writer = m.member_no JOIN attach a ON b.board_no = a.board_no WHERE b.board_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardNo);
+			rs = pstmt.executeQuery();
+
+			board = new Board();
+			if (rs.next()) {
+				board.setNewName(rs.getString("a.new_name"));
+				board.setBoardNo(rs.getInt("b.board_no"));
+				board.setBoardTitle(rs.getString("b.board_title"));
+				board.setBoardContent(rs.getString("b.board_content"));
+				board.setBoardWriter(rs.getInt("b.board_writer"));
+				board.setRegDate(rs.getTimestamp("b.reg_date").toLocalDateTime());
+				board.setModDate(rs.getTimestamp("b.mod_date").toLocalDateTime());
+				board.setMemberName(rs.getString("m.member_name"));
+			}
+			System.out.println(board.getNewName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		return board;
 	}
 
 }

@@ -8,6 +8,7 @@ Member m = (Member) session.getAttribute("member");
 	<div id="nav_wrap">
 		<div class="menu">
 			<ul>
+				<li><a href="/boardList">게시판</a></li>
 				<%
 				if (m == null) {
 				%>
@@ -16,7 +17,6 @@ Member m = (Member) session.getAttribute("member");
 					2. /views/member/login.jsp
 					3. /resources/css/member/login.css -->
 				<li><a href="/memberCreate">회원가입</a></li>
-				<li><a href="/boardList">게시판</a></li>
 				<%
 				} else {
 				%>
