@@ -75,37 +75,52 @@ List<Board> boardList = (List<Board>) request.getAttribute("resultList");
 			</div>
 		</div>
 	</section>
-	<%
-	if (paging != null) {
-	%>
+	<%-- <%if (paging != null) {%>
 	<div class="center">
 		<div class="pagination">
-			<%
-			if (paging.isPrev()) {
-			%>
-			<a href="/boardList?nowPage=<%=(paging.getPageBarStart() - 1)%>&board_title=<%=paging.getBoardTitle() == null ? "" : paging.getBoardTitle()%>">&laquo;</a>
-			<%
-			}
-			%>
-			<%
-			for (int i = paging.getPageBarStart(); i <= paging.getPageBarEnd(); i++) {
-			%>
-			<a href="/boardList?nowPage=<%=i%>&board_title=<%=paging.getBoardTitle() == null ? "" : paging.getBoardTitle()%>"><%=i%></a>
-			<%
-			}
-			%>
-			<%
-			if (paging.isNext()) {
-			%>
-			<a href="/boardList?nowPage=<%=(paging.getPageBarEnd() + 1)%>&board_title=<%=paging.getBoardTitle() == null ? "" : paging.getBoardTitle()%>">&raquo;</a>
-			<%
-			}
-			%>
+			<%if (paging.isPrev()) {%>
+				<a href="/boardList?nowPage=<%=(paging.getPageBarStart() - 1)%>&board_title=<%=paging.getBoardTitle() == null ? "" : paging.getBoardTitle()%>">&laquo;</a>
+			<%}%>
+			<%for (int i = paging.getPageBarStart(); i <= paging.getPageBarEnd(); i++) {%>
+				<a href="/boardList?nowPage=<%=i%>&board_title=<%=paging.getBoardTitle() == null ? "" : paging.getBoardTitle()%>"><%=i%></a>
+			<%}%>
+			<%if (paging.isNext()) {%>
+				<a href="/boardList?nowPage=<%=(paging.getPageBarEnd() + 1)%>&board_title=<%=paging.getBoardTitle() == null ? "" : paging.getBoardTitle()%>">&raquo;</a>
+			<%}%>
 		</div>
 	</div>
-	<%
-	}
-	%>
+	<%}%> --%>
+	<c:if test="${not empty paging}">
+		<div class="center">
+			<div class="pagination">
+				<c:if test="${paging.prev}">
+					<a href="/boardList?nowPage=${paging.pageBarStart-1}&board_title=${empty paging.boardTitle ? '' : paging.boardTitle}">&laquo;</a>
+				</c:if>
+				<c:forEach var="i" begin="${paging.pageBarStart}" end="${paging.pageBarEnd}">
+					<a href="/boardList?nowPage=${i}&board_title=${empty paging.boardTitle ? '' : paging.boardTitle}">${i}</a>
+				</c:forEach>
+				<c:if test="${paging.next}">
+					<a href="/boardList?nowPage=${paging.pageBarEnd+1}&board_title=${empty paging.boardTitle ? '' : paging.boardTitle}">&raquo;</a>
+				</c:if>
+			</div>
+		</div>
+	</c:if>
+
+	<%-- <c:if test="${not empty paging}">
+		<div class="center">
+			<div class="pagination">
+				<c:if test="${paging.prev}">
+					<a href="/boardList?nowPage=${paging.pageBarStart-1}&board_title=${(paging.boardTitle eq null) ? '' : paging.boardTitle}">&laquo;</a>
+				</c:if>
+				<c:forEach var="i" begin="${paging.pageBarStart}" end="${paging.pageBarEnd}" step="1" varStatus="vs">
+					<a href="/boardList?nowPage=${vs.index}&board_title=${(paging.boardTitle eq null) ? '' : paging.boardTitle}">${vs.index}</a>
+				</c:forEach>
+				<c:if test="${paging.next}">
+					<a href="/boardList?nowPage=${paging.pageBarEnd+1}&board_title=${(paging.boardTitle eq null) ? '' : paging.boardTitle}">&raquo;</a>
+				</c:if>
+			</div>
+		</div>
+	</c:if> --%>
 	<script>
 		$('.board_list tbody tr').on('click', function() {
 			const boardNo = $(this).data('board-no');
