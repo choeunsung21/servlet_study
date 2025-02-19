@@ -23,25 +23,24 @@ DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm");
 				<ul>
 					<li><img src="<%=request.getContextPath()%>/filePath?attach_no=<%=board.getAttachNo()%>">
 					<br>
-					<a href="<%=request.getContextPath()%>/fileDownload?attach_no=<%=board.getAttachNo()%>">파일 다운로드</a>
-					</li>
+					<a href="<%=request.getContextPath()%>/fileDownload?attach_no=<%=board.getAttachNo()%>">파일 다운로드</a></li>
 					<li>
 						<table>
 							<tr>
 								<td>제목</td>
-								<td><%=board.getBoardTitle()%></td>
+								<td>${board.boardTitle}</td>
 							</tr>
 							<tr>
 								<td>내용</td>
-								<td><%=board.getBoardContent()%></td>
+								<td>${board.boardContent}</td>
 							</tr>
 							<tr>
 								<td>작성자</td>
-								<td><%=board.getMemberName()%></td>
+								<td>${board.memberName}</td>
 							</tr>
 							<tr>
 								<td>등록일</td>
-								<td><%=board.getRegDate().format(dtf)%></td>
+								<td>${board.regDate}</td>
 							</tr>
 							<tr>
 								<td>수정일</td>

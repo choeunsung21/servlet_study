@@ -25,8 +25,7 @@ List<Board> boardList = (List<Board>) request.getAttribute("resultList");
 		<div id="section_wrap">
 			<div class="search">
 				<form action="/boardList" name="search_board_form" method="get">
-					<input type="text" name="board_title" placeholder="검색하고자 하는 게시글 제목을 입력하세요." value="<%=paging.getBoardTitle() == null ? "" : paging.getBoardTitle()%>">
-					<input type="submit" value="검색">
+					<input type="text" name="board_title" placeholder="검색하고자 하는 게시글 제목을 입력하세요." value="<%=paging.getBoardTitle() == null ? "" : paging.getBoardTitle()%>"> <input type="submit" value="검색">
 				</form>
 			</div>
 			<div class="word">
@@ -51,42 +50,66 @@ List<Board> boardList = (List<Board>) request.getAttribute("resultList");
 
 					</thead>
 					<tbody>
-						<%
+						<%-- <%
 						DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm");
 						for (int i = 0; i < boardList.size(); i++) {
 						%><tr data-board-no="<%=boardList.get(i).getBoardNo()%>">
-							<td><%=((paging.getNowPage()-1)*paging.getNumPerPage())+(i+1)%></td>
+							<td><%=((paging.getNowPage() - 1) * paging.getNumPerPage()) + (i + 1)%></td>
 							<td><%=boardList.get(i).getBoardTitle()%></td>
 							<td><%=boardList.get(i).getMemberName()%></td>
 							<td><%=boardList.get(i).getRegDate().format(dtf)%></td>
 						</tr>
 						<%
 						}
-						%>
+						%> --%>
+						<c:forEach var="result" items="${resultList }" varStatus="vs">
+							<tr data-board-no="${result.boardNo}">
+								<td>${(paging.nowPage - 1) * paging.numPerPage + (vs.index + 1)}</td>
+								<td>${result.boardTitle}</td>
+								<td>${result.memberName}</td>
+								<td>${result.regDate}</td>
+							</tr>
+						</c:forEach>
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</section>
-	<% if(paging != null) { %>
-		<div class="center">
-			<div class="pagination">
-				<% if(paging.isPrev()) { %>
-					<a href="/boardList?nowPage=<%= (paging.getPageBarStart()-1) %>&board_title=<%= paging.getBoardTitle() == null ? "" : paging.getBoardTitle() %>">&laquo;</a>
-				<% } %>
-				<% for(int i=paging.getPageBarStart(); i<=paging.getPageBarEnd(); i++) { %>
-					<a href="/boardList?nowPage=<%= i %>&board_title=<%= paging.getBoardTitle() == null ? "" : paging.getBoardTitle() %>"><%= i %></a>
-				<% } %>
-				<% if(paging.isNext()) { %>
-					<a href="/boardList?nowPage=<%= (paging.getPageBarEnd()+1) %>&board_title=<%= paging.getBoardTitle() == null ? "" : paging.getBoardTitle() %>">&raquo;</a>
-				<% } %>
-			</div>
+	<%
+	if (paging != null) {
+	%>
+	<div class="center">
+		<div class="pagination">
+			<%
+			if (paging.isPrev()) {
+			%>
+			<a href="/boardList?nowPage=<%=(paging.getPageBarStart() - 1)%>&board_title=<%=paging.getBoardTitle() == null ? "" : paging.getBoardTitle()%>">&laquo;</a>
+			<%
+			}
+			%>
+			<%
+			for (int i = paging.getPageBarStart(); i <= paging.getPageBarEnd(); i++) {
+			%>
+			<a href="/boardList?nowPage=<%=i%>&board_title=<%=paging.getBoardTitle() == null ? "" : paging.getBoardTitle()%>"><%=i%></a>
+			<%
+			}
+			%>
+			<%
+			if (paging.isNext()) {
+			%>
+			<a href="/boardList?nowPage=<%=(paging.getPageBarEnd() + 1)%>&board_title=<%=paging.getBoardTitle() == null ? "" : paging.getBoardTitle()%>">&raquo;</a>
+			<%
+			}
+			%>
 		</div>
-	<% } %>
+	</div>
+	<%
+	}
+	%>
 	<script>
-		$('.board_list tbody tr').on('click',function(){
+		$('.board_list tbody tr').on('click', function() {
 			const boardNo = $(this).data('board-no');
-			location.href='/boardDetail?board_no='+boardNo;
+			location.href = '/boardDetail?board_no=' + boardNo;
 		})
 	</script>
 </body>
