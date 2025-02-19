@@ -150,7 +150,7 @@ public class BoardDao {
 
 			board = new Board();
 			if (rs.next()) {
-				board.setNewName(rs.getString("a.new_name"));
+				board.setAttachNo(rs.getInt("a.attach_no"));
 				board.setBoardNo(rs.getInt("b.board_no"));
 				board.setBoardTitle(rs.getString("b.board_title"));
 				board.setBoardContent(rs.getString("b.board_content"));
@@ -159,7 +159,6 @@ public class BoardDao {
 				board.setModDate(rs.getTimestamp("b.mod_date").toLocalDateTime());
 				board.setMemberName(rs.getString("m.member_name"));
 			}
-			System.out.println(board.getNewName());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -167,6 +166,31 @@ public class BoardDao {
 			close(pstmt);
 		}
 		return board;
+	}
+
+	public Attach selectAttachOne(Connection conn, int attachNo) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Attach a = null;
+		try {
+			String sql = "SELECT * FROM `attach` WHERE attach_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, attachNo);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				a = new Attach();
+				a.setAttachNo(rs.getInt("attach_no"));
+				a.setOriName(rs.getString("ori_name"));
+				a.setNewName(rs.getString("new_name"));
+				a.setAttachPath(rs.getString("attach_path"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		return a;
 	}
 
 }

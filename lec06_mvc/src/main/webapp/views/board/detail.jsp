@@ -21,7 +21,10 @@ DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm");
 			</div>
 			<div class="board_detail">
 				<ul>
-					<li><img src="C:\\upload\\board\\<%=board.getNewName()%>"> <br> <span></span></li>
+					<li><img src="<%=request.getContextPath()%>/filePath?attach_no=<%=board.getAttachNo()%>">
+					<br>
+					<a href="<%=request.getContextPath()%>/fileDownload?attach_no=<%=board.getAttachNo()%>">파일 다운로드</a>
+					</li>
 					<li>
 						<table>
 							<tr>
